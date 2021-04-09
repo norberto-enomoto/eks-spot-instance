@@ -1,0 +1,56 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+    name: EKS-course-cluster
+    region: us-east-2
+nodeGroups:
+    - name: dev-2vcpu-2gb-spot
+      minSize: 0
+      maxSize: 5
+      desiredCapacity: 1
+      instancesDistribution:
+        instanceTypes: ["t3.small", "t4g.small"] 
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 0
+        spotAllocationStrategy: capacity-optimized
+      labels:
+        lifecycle: Ec2Spot
+        intent: apps
+        aws.amazon.com/spot: "true"
+      taints:
+        spotInstance: "true:PreferNoSchedule"
+      tags:
+        k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+        k8s.io/cluster-autoscaler/node-template/label/intent: apps
+        k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
+        k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
+      iam:
+        withAddonPolicies:
+          autoScaler: true
+          cloudWatch: true
+          albIngress: true
+    - name: dev-2vcpu-4gb-spot
+      minSize: 0
+      maxSize: 5
+      desiredCapacity: 1
+      instancesDistribution:
+        instanceTypes: ["t3.medium", "t4g.medium"] 
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 0
+        spotAllocationStrategy: capacity-optimized
+      labels:
+        lifecycle: Ec2Spot
+        intent: apps
+        aws.amazon.com/spot: "true"
+      taints:
+        spotInstance: "true:PreferNoSchedule"
+      tags:
+        k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+        k8s.io/cluster-autoscaler/node-template/label/intent: apps
+        k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
+        k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
+      iam:
+        withAddonPolicies:
+          autoScaler: true
+          cloudWatch: true
+          albIngress: true

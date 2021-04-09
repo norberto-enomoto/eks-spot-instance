@@ -1,0 +1,23 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS-course-cluster
+  region: us-east-2
+  
+nodeGroups:
+  - name: ng-1
+    instanceType: t3.medium
+    minSize: 0
+    maxSize: 3
+    desiredCapacity: 2    
+    labels:
+      lifecycle: OnDemand
+      intent: control-apps
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        cloudWatch: true
+        albIngress: true
+    ssh: # use existing EC2 key
+      publicKeyName: eks-course
